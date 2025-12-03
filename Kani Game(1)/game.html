@@ -1,29 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FRUIT MANIA - Game</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fruit Match - Game</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body class="bg-game">
-  <header class="game-header">
-    <h1>FRUIT MANIA</h1>
-    <div class="controls">
-      <button id="hintBtn" class="btn-small">Hint</button>
-      <button id="restartBtn" class="btn-small">Restart</button>
-      <a href="index.html" class="btn-small">Home</a>
-    </div>
-  </header>
+<body>
+  <div class="forest-bg">
+    <div class="game-container">
+      <h1 class="game-title">🍎 Fruit Match Mania 🍎</h1>
+      <div class="game-info">
+        <p>⏳ Time: <span id="time">60</span> sec</p>
+        <p>⭐ Score: <span id="score">0</span></p>
+        <p>💖 Attempts: <span id="attempts">10</span></p>
+      </div>
 
-  <section class="board-wrap">
-    <div id="board" class="board"></div>
-  </section>
+      <div id="game-board" class="game-board"></div>
+
+      <div class="game-buttons">
+        <button class="earn-btn" onclick="getBonusAttempt()">🍌 Earn 1 Attempt</button>
+        <button class="earn-btn" id="hintBtn">💡 Hint</button>
+        <button id="backBtn" class="game-btn" onclick="goBackToLevel()">⬅ Back to Level</button>
+      </div>
+    </div>
+
+    <!-- Banana API Modal -->
+<div class="banana-modal" id="bananaModal">
+  <div class="banana-content">
+    <h3>🍌 Solve the Banana Puzzle!</h3>
+    <img id="bananaImage" src="" alt="Banana Puzzle">
+    <input type="text" id="bananaAnswer" placeholder="Enter your answer">
+    <div>
+      <button class="banana-btn" onclick="submitBanana()">Submit</button>
+      <button class="close-btn" onclick="closeBanana()">Close</button>
+    </div>
+    <p id="bananaMessage"></p>
+  </div>
+</div>
+
+
+<!-- Trivia Modal -->
+<div class="banana-modal" id="triviaModal">
+  <div class="banana-content">
+    <h3>🧠 Trivia Challenge!</h3>
+    <p id="triviaQuestion"></p>
+    <div id="triviaOptions" style="margin: 10px 0;"></div>
+    <p id="triviaMessage"></p>
+    <button class="close-btn" onclick="closeTrivia()">Close</button>
+  </div>
+</div>
+
+
+
+
+
+
+  </div>
 
   <script src="script.js"></script>
-
-  <footer>
-    <p>&copy;FruitMania | All Rights Reserved.</p>
-  </footer>
 </body>
 </html>
