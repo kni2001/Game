@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fruit Match - Select Level</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="forest-bg">
+    <div class="level-container">
+      <h1 class="level-title">🍉 Select Your Level 🍉</h1>
+      <div class="level-buttons">
+        <button class="level-btn easy" onclick="selectLevel('easy')">EASY 🍓</button>
+        <button class="level-btn medium" onclick="selectLevel('medium')">MEDIUM 🍊</button>
+        <button class="level-btn hard" onclick="selectLevel('hard')">HARD 🍍</button>
+      </div>
+      <div class="level-bottom-buttons">
+        <button id="scoreboardBtn" class="level-extra-btn" onclick="openScoreboard()">🏆 View Scoreboard</button>
+        <button id="backBtn" class="level-extra-btn" onclick="goBack()">⬅ Back</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
