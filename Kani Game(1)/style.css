@@ -1,391 +1,438 @@
-:root {
-  --card-size: 100px;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(images/bg3.jpg);
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-}
-
-body {
+* {
   margin: 0;
-  font-family: 'Comic Neue', sans-serif;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }
 
-/* home and forms */
-.bg {
+body, html {
+  height: 100%;
+}
+
+/* Background similar to your screenshot */
+.forest-bg {
+  background: url("forest-bg.jpg") no-repeat center center/cover;
+  width: 100%;
+  height: 100%;
   display: flex;
-  align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  align-items: center;
 }
 
-.bg-game {
-  min-height: 100vh;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(images/bg3.jpg);
-   background-repeat: no-repeat;
-  background-size: 100% 100%;  
-}
-
-
-.centered-card {
-  background: rgba(255,255,255,0.8);
-  padding: 40px;
-  border-radius: 16px;
+.container {
   text-align: center;
 }
 
-.main-content{
-    width: 100%;
-	height: 100%;
+.game-title {
+  font-size: 3rem;
+  color: #ffffff;
+  text-shadow: 0 0 20px #ff6347, 0 0 40px #ffcc33;
+  margin-bottom: 40px;
+  animation: glow 2s ease-in-out infinite alternate;
 }
 
-.principal{
-    left: 30%;
-	top: 20%;
-	position: absolute;
-	letter-spacing: 5px;
-	text-align: center;
+@keyframes glow {
+  from { text-shadow: 0 0 20px #ff6347, 0 0 40px #ffcc33; }
+  to { text-shadow: 0 0 40px #ff4500, 0 0 60px #ffd700; }
 }
 
-
-.principal h1{
-  font-size: 120px;
-	margin-bottom: 20px;
-  color: #dbf7c6;
+.btn-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
-.principal p{
-    margin-top: 20px;
-    font-size: 40px;
-    color: #dbf7c6;
-}
-
-
-.principal a{
-    display: inline-block;
-  margin-top: 30px;
-  margin-right: 10px;
-  padding: 25px 40px;
-  font-size: 1.8em;
-  font-weight: 700;
-  background: linear-gradient(45deg, #6b0123, #f74f1b, #6b0123);
-  color: #f7e0b2;
-  text-decoration: none;
-  border: 2px solid #f7eecb;
-  border-radius: 20px;
-  transition: background 0.3s;
-  transition: transform 0.3s ease;
-}
-
-.principal a:hover{
-    background: linear-gradient(45deg, #4a0114, #a62a03, #4a0114);
-	color: #fff;
-    transform: translateY(-5px);
-}
-
-
-
-.btn-small {
-  padding: 6px 10px;
-  font-size: 20px;
-    background: linear-gradient(45deg, #6b0123, #f74f1b, #6b0123);
-  color: white;
+.main-btn {
+  background: linear-gradient(135deg, #ff4500, #ff6347);
+  color: #fff;
   border: none;
-  border-radius: 12px;
-  padding: 20px 40px;
-  margin: 8px;
+  padding: 15px 60px;
+  border-radius: 40px;
+  font-size: 1.2rem;
   font-weight: bold;
   cursor: pointer;
+  letter-spacing: 1px;
+  box-shadow: 0 0 15px rgba(255, 99, 71, 0.6);
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.main-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 30px rgba(255, 165, 0, 0.8);
+}
+
+/* ===== Form Pages (Login/Register) ===== */
+.form-container {
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  color: #ffffff;
+  width: 350px;
+  box-shadow: 0 0 25px rgba(255, 140, 0, 0.5);
+}
+
+.form-title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px #ffcc33, 0 0 25px #ff6347;
+}
+
+.form-box {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-box input {
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  outline: none;
+  text-align: center;
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.submit-btn:hover {
+  transform: scale(1.05);
+}
+
+.bottom-text {
+  margin-top: 20px;
+  font-size: 0.9rem;
+}
+
+.bottom-text a {
+  color: #ffcc33;
   text-decoration: none;
-  
+  font-weight: bold;
 }
 
-.btn-small:hover{
-    background: linear-gradient(45deg, #4a0114, #a62a03, #4a0114);
+.bottom-text a:hover {
+  text-decoration: underline;
+}
+
+.back-btn {
+  margin-top: 20px;
+  background: transparent;
+  border: 2px solid #ffcc33;
+  color: #ffcc33;
+  border-radius: 30px;
+  padding: 8px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.back-btn:hover {
+  background: #ffcc33;
+  color: #000;
+}
+/* 🔘 Shared style for all game interface buttons */
+.game-btn {
+  background: linear-gradient(135deg, #ffb703, #fb8500);
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 30px;
+  cursor: pointer;
+  margin: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s, background 0.3s;
+}
+
+.game-btn:hover {
+  background: linear-gradient(135deg, #ff9e00, #ff6f00);
+  transform: scale(1.05);
+}
+
+.game-btn:active {
+  transform: scale(0.97);
 }
 
 
-
-.form-card {
-  background: rgba(255,255,255,0.8);
-  border-radius: 12px;
-  padding: 25px;
-  width: 90%;
-  max-width: 400px;
+/* ===== Level Selection Page ===== */
+.level-container {
+  text-align: center;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  padding: 50px;
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(255, 140, 0, 0.6);
+  color: #fff;
 }
 
-
-
-.error {
-  color: red;
+.level-title {
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+  text-shadow: 0 0 20px #ffcc33, 0 0 40px #ff6347;
+  animation: glow 2s ease-in-out infinite alternate;
 }
 
-/* game */
-.game-header {
+.level-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.level-btn {
+  width: 200px;
+  padding: 15px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 40px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.level-btn.easy {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  box-shadow: 0 0 15px rgba(46, 204, 113, 0.6);
+}
+
+.level-btn.medium {
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+  box-shadow: 0 0 15px rgba(243, 156, 18, 0.6);
+}
+
+.level-btn.hard {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  box-shadow: 0 0 15px rgba(231, 76, 60, 0.6);
+}
+
+.level-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+}
+
+/* ===== Scoreboard & Back Buttons Section ===== */
+.level-bottom-buttons {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 18px 28px;
+  margin-top: 40px;
+  width: 100%;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.game-header h1{
-    color: #dbf7c6;
+.level-extra-btn {
+  background: linear-gradient(135deg, #f3cf03, #e23f08f9);
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(252, 252, 252, 0.6);
+  transition: transform 0.2s, box-shadow 0.3s;
 }
 
-.board-wrap {
+.level-extra-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.9);
+}
+
+
+/* ===== Game Page ===== */
+.game-container {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 0 30px rgba(255, 140, 0, 0.5);
+  width: 90%;
+  max-width: 800px;
+}
+
+.game-info {
+  display: flex;
+  justify-content: space-around;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.game-board {
+  display: grid;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px auto;
+}
+
+.card {
+  width: 100px;
+  height: 100px;
+  background: #1f2e4a;
+  border-radius: 15px;
+  cursor: pointer;
   display: flex;
   justify-content: center;
-  padding: 100px;
+  align-items: center;
+  font-size: 2rem;
+  color: white;
+  transition: transform 0.3s;
 }
 
-.board {
-  display: grid;
-  grid-template-columns: repeat(4, var(--card-size));
-  gap: 12px;
+.card.flipped {
+  background: #fff;
+  color: #000;
+  transform: rotateY(180deg);
 }
-
-/* card */
+/*hint flip cards*/
 .card {
-  width: var(--card-size);
-  height: var(--card-size);
-  perspective: 900px;
+  transition: transform 0.4s, background 0.4s, color 0.4s;
+  transform-style: preserve-3d;
 }
 
-.card-inner {
-  position: relative;
+.card.hint-temp {
+  background: #fff9c4; /* light yellow glow */
+  transform: rotateY(180deg);
+}
+
+.game-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.earn-btn {
+  background: linear-gradient(135deg, #f1c40f, #f39c12);
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  padding: 10px 25px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.earn-btn:hover {
+  transform: scale(1.05);
+}
+
+/* ===== Banana API Modal ===== */
+/* ====== Unified Modal Design for Banana API & Trivia ====== */
+.banana-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  transform-style: preserve-3d;
-  transition: transform 0.5s;
-  cursor: pointer;
-}
-
-.card.flipped .card-inner {
-  transform: rotateY(180deg);
-}
-
-.card.matched .card-inner {
-  transform: rotateY(180deg);
-  opacity: 1;
-}
-
-.card-face {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
+  background: rgba(0, 0, 0, 0.85);
+  display: none;
   justify-content: center;
-  border-radius: 12px;
-  backface-visibility: hidden;
+  align-items: center;
+  z-index: 999;
+  animation: fadeIn 0.3s ease;
 }
 
-.card-back {
-  background: linear-gradient(180deg, #ffd166, #ff9a9e);
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-.card-front {
-  background: white;
-  transform: rotateY(180deg);
-  font-size: 40px;
-}
-
-
-
-
-.wrapper1 {
-    position: absolute;
-    top: 3%;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    width: 550px;
-    height: 500px;
-    background: transparent;
-    border: 2px solid rgba(255, 255, 255, 0.5);
-    border-radius: 20px;
-    backdrop-filter: blur(15px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    overflow: hidden;
-}
-
-.wrapper2 {
-    position: absolute;
-    top: 3%;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    width: 550px;
-    height: 600px;
-    background: transparent;
-    border: 2px solid rgba(255, 255, 255, 0.5);
-    border-radius: 20px;
-    backdrop-filter: blur(15px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    overflow: hidden;
-}
-
-
-.wrapper1 .form-box{
-	width: 500px;
-  padding: 70px;
-  padding-top: 40px;
-}
-
-
-
-
-.wrapper1 .form-box.login {
-		transition: transform .18s ease;
-		transform: translateX(0);
-}
-
-
-
-.wrapper2 .form-box.register {
-	width: 500px;
-  padding: 70px;
-  padding-top: 50px;
-}
-
-
-
-
-
-
-
-
-
-.form-box h2{
-	font-size: 2em;
-	color: #e5fcb6;
-	text-align: center;
-	margin-right: 80px;
-}
-.input-box{
-	position: relative;
-	width: 80%;
-	height: 50px;
-	border-bottom: 2px solid #e7fac0;
-	margin: 30px 0;
-}
-
-.input-box label{
-	position: absolute;
-	top: 50%;
-	left: 5px;
-	transform: translateY(-50%);
-	font-size: 1em;
-	color: #e7fac0;
-	font-weight: 500;
-	pointer-events: none;
-	transition: .5s;
-}
-
-.input-box input:focus~label,
-.input-box input:valid~label{
-	top: -5px;
-}
-
-.input-box input{
-	width: 100%;
-	height: 100%;
-	background: transparent;
-	border: none;
-	outline: none;
-	font-size: 1em;
-	color: #fff;
-	line-height: 57px;
-}
-
-.input-box .icon {
-	position: absolute;
-	right: 8px;
-	font-size: 1.2em;
-	color: #e7fac0;
-	line-height: 57px;
-}
-.remember-forgot{
-	font-size: .9em;
-	color: #e7fac0;
-	font-weight: 500;
-	margin: -15px 0 15px;
-	display: flex;
-	justify-content: space-between;
-}
-.remember-forgot label input {
-	accent-color: #e7fac0;
-	margin-right: 3px;
-}
-
-.remember-forgot a {
-	color: #e7fac0;
-	text-decoration: none;
-	margin-right: 100px;
-}
-
-.remember-forgot a:hover {
-	text-decoration: underline;
-}
-
-.btn {
-	width: 80%;
-	height: 45px;
-	background: linear-gradient(45deg, #6b0123, #f74f1b, #6b0123);
-	border: none;
-	outline: none;
-	border-radius: 6px;
-	cursor: pointer;
-  margin-right: 100px;
-	
-}
-
-.btn a{
-    text-decoration: none;
-	font-size: 1.3em;
-	color: #fff;
-	font-weight: 500;
-}
-
-.btn:hover{
-  background: linear-gradient(45deg, #4a0114, #a62a03, #4a0114);
-	color: #fff;
-}
-
-
-.login-register{
-	font-size: .9em;
-	color: #e7fac0;
-	text-align: center;
-	font-weight: 500;
-	margin: 25px 0 10px;
-	
-}
-
-.login-register p a {
-	color: #e7fac0;
-	text-decoration: none;
-	font-weight: 600;
-	margin-right: 100px;
-}
-
-.login-register p a:hover {
-	text-decoration: underline;
-}
-
-.person-icon{
-	position: absolute;
-	right: 8px;
-	font-size: 1.2em;
-	color: #e7fac0;
-	line-height: 57px;
-}
-
-footer {
-    position: fixed;
+.banana-content {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border-radius: 25px;
+  padding: 30px;
+  width: 350px;
   text-align: center;
-  padding: 15px 822px;
-  background: linear-gradient(45deg, #456902, #590c02);;
-  color: white;
-  margin-top: 850px;
+  color: #fff;
+  box-shadow: 0 0 30px rgba(255, 165, 0, 0.5);
+  animation: popIn 0.3s ease;
 }
+
+@keyframes popIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.banana-content h3 {
+  font-size: 1.6rem;
+  margin-bottom: 15px;
+  text-shadow: 0 0 15px #ffcc33, 0 0 30px #ff6347;
+}
+
+.banana-content img {
+  width: 100%;
+  border-radius: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 0 20px rgba(255, 165, 0, 0.6);
+}
+
+.banana-content input {
+  width: 80%;
+  padding: 10px;
+  border-radius: 20px;
+  border: none;
+  text-align: center;
+  font-size: 1rem;
+  outline: none;
+  margin-bottom: 15px;
+}
+
+#bananaMessage {
+  margin-top: 8px;
+  font-weight: bold;
+  text-shadow: 0 0 8px #ffcc33;
+}
+
+/* ===== Modal Buttons (shared for Banana & Trivia) ===== */
+.banana-btn,
+.close-btn,
+.trivia-option-btn {
+  background: linear-gradient(135deg, #ff4500, #ffcc33);
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 5px;
+  box-shadow: 0 0 15px rgba(255, 140, 0, 0.6);
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.banana-btn:hover,
+.close-btn:hover,
+.trivia-option-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+}
+
+/* Option feedback colors */
+.trivia-option-btn.correct {
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+}
+
+.trivia-option-btn.wrong {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
