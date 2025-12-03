@@ -1,0 +1,391 @@
+:root {
+  --card-size: 100px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(images/bg3.jpg);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Comic Neue', sans-serif;
+}
+
+/* home and forms */
+.bg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.bg-game {
+  min-height: 100vh;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(images/bg3.jpg);
+   background-repeat: no-repeat;
+  background-size: 100% 100%;  
+}
+
+
+.centered-card {
+  background: rgba(255,255,255,0.8);
+  padding: 40px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.main-content{
+    width: 100%;
+	height: 100%;
+}
+
+.principal{
+    left: 30%;
+	top: 20%;
+	position: absolute;
+	letter-spacing: 5px;
+	text-align: center;
+}
+
+
+.principal h1{
+  font-size: 120px;
+	margin-bottom: 20px;
+  color: #dbf7c6;
+}
+
+.principal p{
+    margin-top: 20px;
+    font-size: 40px;
+    color: #dbf7c6;
+}
+
+
+.principal a{
+    display: inline-block;
+  margin-top: 30px;
+  margin-right: 10px;
+  padding: 25px 40px;
+  font-size: 1.8em;
+  font-weight: 700;
+  background: linear-gradient(45deg, #6b0123, #f74f1b, #6b0123);
+  color: #f7e0b2;
+  text-decoration: none;
+  border: 2px solid #f7eecb;
+  border-radius: 20px;
+  transition: background 0.3s;
+  transition: transform 0.3s ease;
+}
+
+.principal a:hover{
+    background: linear-gradient(45deg, #4a0114, #a62a03, #4a0114);
+	color: #fff;
+    transform: translateY(-5px);
+}
+
+
+
+.btn-small {
+  padding: 6px 10px;
+  font-size: 20px;
+    background: linear-gradient(45deg, #6b0123, #f74f1b, #6b0123);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 20px 40px;
+  margin: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  
+}
+
+.btn-small:hover{
+    background: linear-gradient(45deg, #4a0114, #a62a03, #4a0114);
+}
+
+
+
+.form-card {
+  background: rgba(255,255,255,0.8);
+  border-radius: 12px;
+  padding: 25px;
+  width: 90%;
+  max-width: 400px;
+}
+
+
+
+.error {
+  color: red;
+}
+
+/* game */
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 28px;
+}
+
+.game-header h1{
+    color: #dbf7c6;
+}
+
+.board-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 100px;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, var(--card-size));
+  gap: 12px;
+}
+
+/* card */
+.card {
+  width: var(--card-size);
+  height: var(--card-size);
+  perspective: 900px;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+  cursor: pointer;
+}
+
+.card.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card.matched .card-inner {
+  transform: rotateY(180deg);
+  opacity: 1;
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  backface-visibility: hidden;
+}
+
+.card-back {
+  background: linear-gradient(180deg, #ffd166, #ff9a9e);
+}
+
+.card-front {
+  background: white;
+  transform: rotateY(180deg);
+  font-size: 40px;
+}
+
+
+
+
+.wrapper1 {
+    position: absolute;
+    top: 3%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    width: 550px;
+    height: 500px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.wrapper2 {
+    position: absolute;
+    top: 3%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    width: 550px;
+    height: 600px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+
+.wrapper1 .form-box{
+	width: 500px;
+  padding: 70px;
+  padding-top: 40px;
+}
+
+
+
+
+.wrapper1 .form-box.login {
+		transition: transform .18s ease;
+		transform: translateX(0);
+}
+
+
+
+.wrapper2 .form-box.register {
+	width: 500px;
+  padding: 70px;
+  padding-top: 50px;
+}
+
+
+
+
+
+
+
+
+
+.form-box h2{
+	font-size: 2em;
+	color: #e5fcb6;
+	text-align: center;
+	margin-right: 80px;
+}
+.input-box{
+	position: relative;
+	width: 80%;
+	height: 50px;
+	border-bottom: 2px solid #e7fac0;
+	margin: 30px 0;
+}
+
+.input-box label{
+	position: absolute;
+	top: 50%;
+	left: 5px;
+	transform: translateY(-50%);
+	font-size: 1em;
+	color: #e7fac0;
+	font-weight: 500;
+	pointer-events: none;
+	transition: .5s;
+}
+
+.input-box input:focus~label,
+.input-box input:valid~label{
+	top: -5px;
+}
+
+.input-box input{
+	width: 100%;
+	height: 100%;
+	background: transparent;
+	border: none;
+	outline: none;
+	font-size: 1em;
+	color: #fff;
+	line-height: 57px;
+}
+
+.input-box .icon {
+	position: absolute;
+	right: 8px;
+	font-size: 1.2em;
+	color: #e7fac0;
+	line-height: 57px;
+}
+.remember-forgot{
+	font-size: .9em;
+	color: #e7fac0;
+	font-weight: 500;
+	margin: -15px 0 15px;
+	display: flex;
+	justify-content: space-between;
+}
+.remember-forgot label input {
+	accent-color: #e7fac0;
+	margin-right: 3px;
+}
+
+.remember-forgot a {
+	color: #e7fac0;
+	text-decoration: none;
+	margin-right: 100px;
+}
+
+.remember-forgot a:hover {
+	text-decoration: underline;
+}
+
+.btn {
+	width: 80%;
+	height: 45px;
+	background: linear-gradient(45deg, #6b0123, #f74f1b, #6b0123);
+	border: none;
+	outline: none;
+	border-radius: 6px;
+	cursor: pointer;
+  margin-right: 100px;
+	
+}
+
+.btn a{
+    text-decoration: none;
+	font-size: 1.3em;
+	color: #fff;
+	font-weight: 500;
+}
+
+.btn:hover{
+  background: linear-gradient(45deg, #4a0114, #a62a03, #4a0114);
+	color: #fff;
+}
+
+
+.login-register{
+	font-size: .9em;
+	color: #e7fac0;
+	text-align: center;
+	font-weight: 500;
+	margin: 25px 0 10px;
+	
+}
+
+.login-register p a {
+	color: #e7fac0;
+	text-decoration: none;
+	font-weight: 600;
+	margin-right: 100px;
+}
+
+.login-register p a:hover {
+	text-decoration: underline;
+}
+
+.person-icon{
+	position: absolute;
+	right: 8px;
+	font-size: 1.2em;
+	color: #e7fac0;
+	line-height: 57px;
+}
+
+footer {
+    position: fixed;
+  text-align: center;
+  padding: 15px 822px;
+  background: linear-gradient(45deg, #456902, #590c02);;
+  color: white;
+  margin-top: 850px;
+}
