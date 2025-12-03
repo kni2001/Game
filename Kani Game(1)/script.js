@@ -1,192 +1,340 @@
-const fruits = ["🍌","🍎","🍇","🍉","🍒","🍍","🥭","🍑"];
-let cards = [];
-const board = document.getElementById('board');
-let firstCard = null;
-let secondCard = null;
-let lock = false;
-let matches = 0;
-
-function shuffle(arr){
-  for(let i=arr.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));
-    [arr[i],arr[j]]=[arr[j],arr[i]];
-  }
-  return arr;
+function openLogin() {
+  // For now, just go to a separate login page
+  window.location.href = "login.html";
 }
 
-function createBoard(){
-  board.innerHTML='';
-  matches=0;
-  firstCard=secondCard=null;
-  lock=false;
-  cards = shuffle([...fruits, ...fruits]);
-  cards.forEach(fruit=>{
-    const card=document.createElement('div');
-    card.className='card';
-    card.dataset.value=fruit;
-
-    const inner=document.createElement('div');
-    inner.className='card-inner';
-
-    const back=document.createElement('div');
-    back.className='card-face card-back';
-    back.textContent='🍉';
-
-    const front=document.createElement('div');
-    front.className='card-face card-front';
-    front.textContent=fruit;
-
-    inner.appendChild(back);
-    inner.appendChild(front);
-    card.appendChild(inner);
-    card.addEventListener('click',flipCard);
-    board.appendChild(card);
-  });
+function openRegister() {
+  // For now, just go to a separate register page
+  window.location.href = "register.html";
 }
 
-function flipCard(e){
-  if(lock) return;
-  const card=e.currentTarget;
-  if(card.classList.contains('flipped') || card.classList.contains('matched')) return;
-
-  card.classList.add('flipped');
-  if(!firstCard){firstCard=card;return;}
-  secondCard=card;
-  checkMatch();
+function goBack() {
+  window.location.href = "index.html";
 }
 
-function checkMatch(){
-  const match = firstCard.dataset.value === secondCard.dataset.value;
-  if(match){
-    firstCard.classList.add('matched');
-    secondCard.classList.add('matched');
-    matches++;
-    resetTurn();
+function register() {
+  const user = document.getElementById("regUser").value.trim();
+  const pass = document.getElementById("regPass").value.trim();
+
+  if (user && pass) {
+    localStorage.setItem(user, pass);
+    alert("Registration successful! 🍍");
+    window.location.href = "login.html";
   } else {
-    lock=true;
-    setTimeout(()=>{
-      firstCard.classList.remove('flipped');
-      secondCard.classList.remove('flipped');
-      resetTurn();
-    },800);
-  }
-
-  if(matches===fruits.length){
-    setTimeout(()=>alert('🎉 You matched all fruits!'),300);
+    alert("Please fill all fields!");
   }
 }
 
-function resetTurn(){
-  [firstCard, secondCard]=[null,null];
-  lock=false;
+function login() {
+  const user = document.getElementById("loginUser").value.trim();
+  const pass = document.getElementById("loginPass").value.trim();
+  const storedPass = localStorage.getItem(user);
+
+  if (storedPass === pass && user && pass) {
+    alert(`Welcome back, ${user}! 🍉`);
+    window.location.href = "level.html"; // redirect to your game page
+  } else {
+    alert("Invalid username or password!");
+  }
 }
 
-// --- EXTERNAL BANANA QUIZ VERSION --- //
-document.getElementById('hintBtn').addEventListener('click', () => {
-  // Ask the player if they want to open Banana Quiz
-  const openQuiz = confirm("Need help? Open the Banana Quiz challenge in a new tab?");
-  if (openQuiz) {
-    // Open the Banana Quiz site
-    window.open("https://marcconrad.com/uob/banana/", "_blank");
+function selectLevel(level) {
+  localStorage.setItem("selectedLevel", level);
+  alert(`You selected ${level.toUpperCase()} level! 🍒`);
+  window.location.href = "game.html";
+}
 
-    // Simulate: After player returns from quiz, show reward button
-    setTimeout(() => {
-      alert("🎉 Welcome back! If you answered the Banana Quiz correctly, claim your reward!");
-      showRewardButton();
-    }, 6000); // Wait 6 seconds to simulate player completing quiz
-  }
+let cards = [];
+let flippedCards = [];
+let matchedCards = 0;
+let attempts;
+let timeLeft;
+let timer;
+let score = 0;
+let level = localStorage.getItem("selectedLevel") || "easy";
+let gamePaused = false;
+let gameOver = false;
+
+// Fruit emojis (enough for all 3 levels)
+const fruits = [
+  "🍎", "🍌", "🍓", "🍊", "🍇", "🍉", "🍍", "🥝",
+  "🍒", "🍑", "🥥", "🍋", "🍐", "🍈", "🍏", "🥭", "🫐", "🥑"
+];
+
+function startGame() {
+  const board = document.getElementById("game-board");
+  board.innerHTML = "";
+
+  gameOver = false;
+  matchedCards = 0;
+  flippedCards = [];
+  score = 0;
+
+// 🟢 Level configurations
+let cardSize; // new variable
+
+if (level === "easy") {
+    board.style.gridTemplateColumns = "repeat(4, 100px)";
+    attempts = 10;
+    timeLeft = 60;
+    cardSize = 100; // px
+    cards = [...fruits.slice(0, 8), ...fruits.slice(0, 8)].sort(() => Math.random() - 0.5); // 16 cards
+} 
+else if (level === "medium") {
+    board.style.gridTemplateColumns = "repeat(5, 90px)";
+    attempts = 15;
+    timeLeft = 80;
+    cardSize = 90; // smaller than easy
+    cards = [...fruits.slice(0, 13)];
+    cards = [...cards, ...cards.slice(0, 12)].sort(() => Math.random() - 0.5); // 25 cards
+} 
+else if (level === "hard") {
+    board.style.gridTemplateColumns = "repeat(6, 80px)";
+    attempts = 20;
+    timeLeft = 100;
+    cardSize = 80; // smallest
+    cards = [...fruits.slice(0, 18), ...fruits.slice(0, 18)].sort(() => Math.random() - 0.5); // 36 cards
+}
+
+
+
+  // Create cards
+cards.forEach((fruit, index) => {
+    const card = document.createElement("div");
+    card.classList.add("card");
+    card.dataset.value = fruit;
+    card.dataset.index = index;
+    
+    // Set dynamic size
+    card.style.width = cardSize + "px";
+    card.style.height = cardSize + "px";
+    
+    card.addEventListener("click", flipCard);
+    board.appendChild(card);
 });
 
-// --- SHOW REWARD BUTTON --- //
-function showRewardButton() {
-  // Avoid duplicates
-  if (document.getElementById('rewardBtn')) return;
 
-  const rewardBtn = document.createElement('button');
-  rewardBtn.id = 'rewardBtn';
-  rewardBtn.textContent = '🎁 Get Reward 🍌';
-  rewardBtn.style.display = 'block';
-  rewardBtn.style.margin = '20px auto';
-  rewardBtn.style.padding = '10px 20px';
-  rewardBtn.style.background = '#ffb703';
-  rewardBtn.style.color = '#fff';
-  rewardBtn.style.border = 'none';
-  rewardBtn.style.borderRadius = '8px';
-  rewardBtn.style.cursor = 'pointer';
-  rewardBtn.style.fontSize = '1em';
+  // Update stats
+  document.getElementById("attempts").textContent = attempts;
+  document.getElementById("time").textContent = timeLeft;
+  document.getElementById("score").textContent = score;
 
-  document.body.appendChild(rewardBtn);
-
-  rewardBtn.addEventListener('click', () => {
-    alert('🎉 Reward activated! All fruits will be revealed for a few seconds!');
-    revealAllCardsTemporarily();
-    rewardBtn.remove(); // remove after one use
-  });
+  startTimer();
 }
 
-// --- FLIP ALL CARDS TEMPORARILY --- //
-function revealAllCardsTemporarily() {
-  const allCards = document.querySelectorAll('.card');
-  allCards.forEach(c => c.classList.add('flipped'));
-  
+function startTimer() {
+  clearInterval(timer);
+  timer = setInterval(() => {
+    if (!gamePaused && !gameOver) {
+      timeLeft--;
+      document.getElementById("time").textContent = timeLeft;
+      if (timeLeft <= 0) {
+        timeLeft = 0;
+        endGame("⏰ Time's up!");
+      }
+    }
+  }, 1000);
+}
+
+function flipCard() {
+  if (gamePaused || gameOver) return;
+  const card = this;
+  if (card.classList.contains("flipped") || flippedCards.length === 2) return;
+
+  card.textContent = card.dataset.value;
+  card.classList.add("flipped");
+  flippedCards.push(card);
+
+  if (flippedCards.length === 2) {
+    setTimeout(checkMatch, 800);
+  }
+}
+
+function checkMatch() {
+  const [card1, card2] = flippedCards;
+  if (card1.dataset.value === card2.dataset.value) {
+    matchedCards += 2;
+    score += 5;
+    document.getElementById("score").textContent = score;
+    flippedCards = [];
+
+    if (matchedCards === cards.length) {
+      endGame(`🎉 You matched all fruits! Final Score: ${score}`);
+    }
+  } else {
+    attempts--;
+    score = Math.max(0, score - 5);
+    document.getElementById("attempts").textContent = attempts;
+    document.getElementById("score").textContent = score;
+
+    card1.classList.remove("flipped");
+    card2.classList.remove("flipped");
+    card1.textContent = "";
+    card2.textContent = "";
+    flippedCards = [];
+
+    if (attempts <= 0) {
+      attempts = 0;
+      endGame(`😢 No attempts left! Final Score: ${score}`);
+    }
+  }
+}
+
+function endGame(message) {
+  clearInterval(timer);
+  gameOver = true;
   setTimeout(() => {
-    allCards.forEach(c => {
-      if (!c.classList.contains('matched')) {
-        c.classList.remove('flipped');
+    alert(message);
+  }, 300);
+}
+
+function resumeGameAfterBonus() {
+  if (attempts > 0 && timeLeft > 0) {
+    gameOver = false;
+    startTimer();
+  }
+}
+
+function goBackToLevel() {
+  window.location.href = "level.html";
+}
+
+/* ===== 🍌 Banana API Feature ===== */
+let bananaData;
+
+function getBonusAttempt() {
+  gamePaused = true;
+  fetch("https://marcconrad.com/uob/banana/api.php")
+    .then(res => res.json())
+    .then(data => {
+      bananaData = data;
+      document.getElementById("bananaImage").src = data.question;
+      document.getElementById("bananaModal").style.display = "flex";
+    })
+    .catch(err => alert("Error loading puzzle!"));
+}
+
+function submitBanana() {
+  const answer = document.getElementById("bananaAnswer").value.trim();
+  const message = document.getElementById("bananaMessage");
+
+  if (answer === bananaData.solution.toString()) {
+    attempts++;
+    document.getElementById("attempts").textContent = attempts;
+    message.textContent = "✅ Correct! You earned 1 attempt!";
+    setTimeout(() => {
+      closeBanana();
+      gamePaused = false;
+      resumeGameAfterBonus();
+    }, 1000);
+  } else {
+    message.textContent = "❌ Incorrect! Try again.";
+  }
+}
+
+function closeBanana() {
+  document.getElementById("bananaModal").style.display = "none";
+  document.getElementById("bananaMessage").textContent = "";
+  document.getElementById("bananaAnswer").value = "";
+  gamePaused = false;
+  if (!gameOver) startTimer();
+}
+
+window.onload = startGame;
+
+let triviaData = null;
+
+document.getElementById("hintBtn").addEventListener("click", () => {
+  gamePaused = true;
+  loadTriviaQuestion();
+});
+
+// Function to fetch and show trivia question
+function loadTriviaQuestion() {
+  fetch("https://opentdb.com/api.php?amount=1&type=multiple")
+    .then(res => res.json())
+    .then(data => {
+      const questionData = data.results[0];
+
+      const options = [...questionData.incorrect_answers, questionData.correct_answer]
+        .sort(() => Math.random() - 0.5);
+
+      triviaData = {
+        question: questionData.question,
+        correct: questionData.correct_answer
+      };
+
+      document.getElementById("triviaQuestion").innerHTML = triviaData.question;
+
+      const optionsDiv = document.getElementById("triviaOptions");
+      optionsDiv.innerHTML = "";
+
+options.forEach(option => {
+  const btn = document.createElement("button");
+  btn.textContent = option;
+  btn.classList.add("trivia-option-btn");
+  btn.onclick = () => checkTriviaAnswer(option);
+  optionsDiv.appendChild(btn);
+});
+
+
+      document.getElementById("triviaMessage").textContent = "";
+      document.getElementById("triviaModal").style.display = "flex";
+    })
+    .catch(err => {
+      alert("Error loading trivia question!");
+      console.error(err);
+    });
+}
+
+// Function to check trivia answer
+function checkTriviaAnswer(selected) {
+  const message = document.getElementById("triviaMessage");
+
+  if (selected === triviaData.correct) {
+    // ✅ Correct answer — close trivia modal automatically
+    document.getElementById("triviaModal").style.display = "none";
+    message.textContent = "";
+
+    // Flip only unmatched cards face-up
+    const allCards = document.querySelectorAll(".card");
+
+    allCards.forEach(card => {
+      // Flip only if not already matched (flipped)
+      if (!card.classList.contains("flipped")) {
+        card.textContent = card.dataset.value;
+        card.classList.add("hint-temp");
       }
     });
-  }, 3000);
+
+    // Keep them visible for 5 seconds, then flip only unmatched ones down again
+    setTimeout(() => {
+      allCards.forEach(card => {
+        if (card.classList.contains("hint-temp")) {
+          card.textContent = "";
+          card.classList.remove("hint-temp");
+        }
+      });
+      gamePaused = false;
+    }, 5000);
+
+  } else {
+    // ❌ Wrong answer — show message briefly, then load another trivia question
+    message.textContent = "❌ Wrong! Try another question...";
+    setTimeout(() => {
+      loadTriviaQuestion();
+    }, 1000);
+  }
+}
+
+
+function closeTrivia() {
+  document.getElementById("triviaModal").style.display = "none";
+  gamePaused = false;
 }
 
 
 
-// helper
-function revealAllCardsTemporarily() {
-  const all = document.querySelectorAll(".card");
-  all.forEach(c => c.classList.add("flipped"));
-  setTimeout(() => {
-    all.forEach(c => {
-      if (!c.classList.contains("matched")) c.classList.remove("flipped");
-    });
-  }, 3000);
-}
 
 
 
-document.getElementById('restartBtn').addEventListener('click',createBoard);
-
-createBoard();
-
-
-
-const wrapper = document.querySelector('.wrapper');
-const loginLink = document.querySelector('.login-link');
-const registerLink = document.querySelector('.register-link');
-const btnPopup = document.querySelector('.btnLogin-popup');
-const iconClose = document.querySelector('.icon-close');
-const content = document.querySelector('.principal');
-
-
-registerLink.addEventListener('click', ()=> {
-    wrapper.classList.add('active');
-});
-
-loginLink.addEventListener('click', ()=> {
-    wrapper.classList.remove('active');
-});
-
-btnPopup.addEventListener('click', ()=> {
-    wrapper.classList.add('active-popup');
-});
-
-btnPopup.addEventListener('click', () =>{
-    content.classList.add('active');
-})
-
-iconClose.addEventListener('click', ()=> {
-    wrapper.classList.remove('active-popup');
-});
-
-iconClose.addEventListener('click', ()=> {
-    content.classList.remove('active');
-});
