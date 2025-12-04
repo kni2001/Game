@@ -1,10 +1,12 @@
+/* script.js - updated to call PHP backend for auth & scores
+   Keep the rest of your game logic unchanged. */
+
+// Navigation helpers
 function openLogin() {
-  // For now, just go to a separate login page
   window.location.href = "login.html";
 }
 
 function openRegister() {
-  // For now, just go to a separate register page
   window.location.href = "register.html";
 }
 
@@ -12,37 +14,84 @@ function goBack() {
   window.location.href = "index.html";
 }
 
+function openScoreboard() {
+  // open the leaderboard page we added
+  window.location.href = "leaderboard.html";
+}
+
+/* ===== AUTH: register & login call backend ===== */
+
 function register() {
   const user = document.getElementById("regUser").value.trim();
   const pass = document.getElementById("regPass").value.trim();
 
-  if (user && pass) {
-    localStorage.setItem(user, pass);
-    alert("Registration successful! 🍍");
-    window.location.href = "login.html";
-  } else {
+  if (!user || !pass) {
     alert("Please fill all fields!");
+    return;
   }
+
+  fetch("register.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username: user, password: pass, display_name: user })
+  })
+    .then(r => r.json())
+    .then(d => {
+      if (d.success) {
+        alert("Registration successful! 🍍");
+        window.location.href = "login.html";
+      } else {
+        alert(d.message || "Registration failed");
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Server error during registration");
+    });
 }
 
 function login() {
   const user = document.getElementById("loginUser").value.trim();
   const pass = document.getElementById("loginPass").value.trim();
-  const storedPass = localStorage.getItem(user);
 
-  if (storedPass === pass && user && pass) {
-    alert(`Welcome back, ${user}! 🍉`);
-    window.location.href = "level.html"; // redirect to your game page
-  } else {
-    alert("Invalid username or password!");
+  if (!user || !pass) {
+    alert("Please fill all fields!");
+    return;
   }
+
+  fetch("login.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username: user, password: pass })
+  })
+    .then(r => r.json())
+    .then(d => {
+      if (d.success) {
+        alert(`Welcome back, ${d.user.display_name || d.user.username}! 🍉`);
+        window.location.href = "level.html";
+      } else {
+        alert(d.message || "Login failed");
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Server error during login");
+    });
 }
+
+/* ===== keep selectLevel as-is (stores chosen level in localStorage) ===== */
 
 function selectLevel(level) {
   localStorage.setItem("selectedLevel", level);
   alert(`You selected ${level.toUpperCase()} level! 🍒`);
   window.location.href = "game.html";
 }
+
+/* ===== Game logic (unchanged) ===== */
+/* ... paste the rest of your existing game logic here exactly as it was ... */
+/* We'll include the same startGame, timer, flipCard, checkMatch, getBonusAttempt, banana/trivia code etc. */
+
+/* START of game code (copied from your provided script) */
 
 let cards = [];
 let flippedCards = [];
@@ -70,51 +119,42 @@ function startGame() {
   flippedCards = [];
   score = 0;
 
-// 🟢 Level configurations
-let cardSize; // new variable
+  let cardSize;
 
-if (level === "easy") {
-    board.style.gridTemplateColumns = "repeat(4, 100px)";
-    attempts = 10;
-    timeLeft = 60;
-    cardSize = 100; // px
-    cards = [...fruits.slice(0, 8), ...fruits.slice(0, 8)].sort(() => Math.random() - 0.5); // 16 cards
-} 
-else if (level === "medium") {
-    board.style.gridTemplateColumns = "repeat(5, 90px)";
-    attempts = 15;
-    timeLeft = 80;
-    cardSize = 90; // smaller than easy
-    cards = [...fruits.slice(0, 13)];
-    cards = [...cards, ...cards.slice(0, 12)].sort(() => Math.random() - 0.5); // 25 cards
-} 
-else if (level === "hard") {
-    board.style.gridTemplateColumns = "repeat(6, 80px)";
-    attempts = 20;
-    timeLeft = 100;
-    cardSize = 80; // smallest
-    cards = [...fruits.slice(0, 18), ...fruits.slice(0, 18)].sort(() => Math.random() - 0.5); // 36 cards
-}
+  if (level === "easy") {
+      board.style.gridTemplateColumns = "repeat(4, 100px)";
+      attempts = 10;
+      timeLeft = 60;
+      cardSize = 100;
+      cards = [...fruits.slice(0, 8), ...fruits.slice(0, 8)].sort(() => Math.random() - 0.5);
+  } 
+  else if (level === "medium") {
+      board.style.gridTemplateColumns = "repeat(5, 90px)";
+      attempts = 15;
+      timeLeft = 80;
+      cardSize = 90;
+      cards = [...fruits.slice(0, 13)];
+      cards = [...cards, ...cards.slice(0, 12)].sort(() => Math.random() - 0.5);
+  } 
+  else if (level === "hard") {
+      board.style.gridTemplateColumns = "repeat(6, 80px)";
+      attempts = 20;
+      timeLeft = 100;
+      cardSize = 80;
+      cards = [...fruits.slice(0, 18), ...fruits.slice(0, 18)].sort(() => Math.random() - 0.5);
+  }
 
+  cards.forEach((fruit, index) => {
+      const card = document.createElement("div");
+      card.classList.add("card");
+      card.dataset.value = fruit;
+      card.dataset.index = index;
+      card.style.width = cardSize + "px";
+      card.style.height = cardSize + "px";
+      card.addEventListener("click", flipCard);
+      board.appendChild(card);
+  });
 
-
-  // Create cards
-cards.forEach((fruit, index) => {
-    const card = document.createElement("div");
-    card.classList.add("card");
-    card.dataset.value = fruit;
-    card.dataset.index = index;
-    
-    // Set dynamic size
-    card.style.width = cardSize + "px";
-    card.style.height = cardSize + "px";
-    
-    card.addEventListener("click", flipCard);
-    board.appendChild(card);
-});
-
-
-  // Update stats
   document.getElementById("attempts").textContent = attempts;
   document.getElementById("time").textContent = timeLeft;
   document.getElementById("score").textContent = score;
@@ -185,6 +225,8 @@ function endGame(message) {
   gameOver = true;
   setTimeout(() => {
     alert(message);
+    // Submit score to server when game ends (attempt to save, but do not block)
+    submitScoreToServer(score, level);
   }, 300);
 }
 
@@ -199,7 +241,7 @@ function goBackToLevel() {
   window.location.href = "level.html";
 }
 
-/* ===== 🍌 Banana API Feature ===== */
+/* ===== Banana API Feature ===== */
 let bananaData;
 
 function getBonusAttempt() {
@@ -240,16 +282,32 @@ function closeBanana() {
   if (!gameOver) startTimer();
 }
 
-window.onload = startGame;
+window.onload = function () {
+  // If this is the game page, start game (original behavior)
+  if (document.getElementById("game-board")) {
+    // ensure level variable is updated from localStorage when loading game page
+    level = localStorage.getItem("selectedLevel") || "easy";
+    startGame();
+  }
+};
 
 let triviaData = null;
 
-document.getElementById("hintBtn").addEventListener("click", () => {
-  gamePaused = true;
-  loadTriviaQuestion();
+document.addEventListener('click', function setupHintBtn(e) {
+  // safe hookup if hintBtn exists at runtime
+  const hintBtn = document.getElementById("hintBtn");
+  if (hintBtn) {
+    hintBtn.removeEventListener('click', loadTriviaQuestionSafe);
+    hintBtn.addEventListener('click', loadTriviaQuestionSafe);
+    document.removeEventListener('click', setupHintBtn);
+  }
 });
 
-// Function to fetch and show trivia question
+function loadTriviaQuestionSafe() {
+  gamePaused = true;
+  loadTriviaQuestion();
+}
+
 function loadTriviaQuestion() {
   fetch("https://opentdb.com/api.php?amount=1&type=multiple")
     .then(res => res.json())
@@ -269,14 +327,13 @@ function loadTriviaQuestion() {
       const optionsDiv = document.getElementById("triviaOptions");
       optionsDiv.innerHTML = "";
 
-options.forEach(option => {
-  const btn = document.createElement("button");
-  btn.textContent = option;
-  btn.classList.add("trivia-option-btn");
-  btn.onclick = () => checkTriviaAnswer(option);
-  optionsDiv.appendChild(btn);
-});
-
+      options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.textContent = option;
+        btn.classList.add("trivia-option-btn");
+        btn.onclick = () => checkTriviaAnswer(option);
+        optionsDiv.appendChild(btn);
+      });
 
       document.getElementById("triviaMessage").textContent = "";
       document.getElementById("triviaModal").style.display = "flex";
@@ -287,27 +344,22 @@ options.forEach(option => {
     });
 }
 
-// Function to check trivia answer
 function checkTriviaAnswer(selected) {
   const message = document.getElementById("triviaMessage");
 
   if (selected === triviaData.correct) {
-    // ✅ Correct answer — close trivia modal automatically
     document.getElementById("triviaModal").style.display = "none";
     message.textContent = "";
 
-    // Flip only unmatched cards face-up
     const allCards = document.querySelectorAll(".card");
 
     allCards.forEach(card => {
-      // Flip only if not already matched (flipped)
       if (!card.classList.contains("flipped")) {
         card.textContent = card.dataset.value;
         card.classList.add("hint-temp");
       }
     });
 
-    // Keep them visible for 5 seconds, then flip only unmatched ones down again
     setTimeout(() => {
       allCards.forEach(card => {
         if (card.classList.contains("hint-temp")) {
@@ -319,7 +371,6 @@ function checkTriviaAnswer(selected) {
     }, 5000);
 
   } else {
-    // ❌ Wrong answer — show message briefly, then load another trivia question
     message.textContent = "❌ Wrong! Try another question...";
     setTimeout(() => {
       loadTriviaQuestion();
@@ -327,14 +378,31 @@ function checkTriviaAnswer(selected) {
   }
 }
 
-
 function closeTrivia() {
   document.getElementById("triviaModal").style.display = "none";
   gamePaused = false;
 }
 
+/* ===== Submit score helper ===== */
+function submitScoreToServer(finalScore, levelName) {
+  // try to save the score; if user not logged in, server returns 401 and we silently ignore
+  fetch('add_score.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ score: finalScore, level: levelName })
+  })
+  .then(r => r.json())
+  .then(d => {
+    // optional: notify player
+    if (d && d.success) {
+      console.log('Score saved');
+    } else {
+      console.log('Score not saved:', d.message || d);
+    }
+  })
+  .catch(err => {
+    console.error('Error saving score', err);
+  });
+}
 
-
-
-
-
+/* ===== End of script.js ===== */
