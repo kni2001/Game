@@ -237,6 +237,10 @@ function resumeGameAfterBonus() {
   }
 }
 
+function restart() {
+  window.location.href = "game.html";
+}
+
 function goBackToLevel() {
   window.location.href = "level.html";
 }
