@@ -436,3 +436,23 @@ body, html {
   background: linear-gradient(135deg, #e74c3c, #c0392b);
 }
 
+
+#playMusicBtn {
+    padding: 15px 25px;
+  background: linear-gradient(150deg, #038c7a, #04c9b0, #038c7a);
+  border: none;
+  color: #fff;
+  border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 600px;
+    margin-left: 1300px;
+    position: absolute;
+  box-shadow: 0 0 10px rgba(252, 252, 252, 0.6);
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+
+#playMusicBtn:hover{
+transform: scale(1.08);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.9);
+}
