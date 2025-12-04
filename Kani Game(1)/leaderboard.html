@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fruit Match - Leaderboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="forest-bg">
+    <div class="level-container">
+      <h1 class="level-title">🏆 Leaderboard</h1>
+      <div id="leaderboardList" class="leaderboard-list"></div>
+      <div style="text-align:center; margin-top:20px;">
+        <button class="level-extra-btn" onclick="window.location.href='level.html'">⬅ Back to Levels</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    // auto-load leaderboard when this page loads
+    document.addEventListener('DOMContentLoaded', loadLeaderboardPage);
+
+    function loadLeaderboardPage() {
+      fetch('leaderboard_api.php')
+        .then(r => r.json())
+        .then(d => {
+          const container = document.getElementById('leaderboardList');
+          if (!d.success) {
+            container.innerHTML = '<p style="color:#fff;">Unable to load leaderboard.</p>';
+            return;
+          }
+          const list = d.leaderboard;
+          if (!list.length) {
+            container.innerHTML = '<p style="color:#fff;">No scores yet. Be the first!</p>';
+            return;
+          }
+          let html = '<ol style="color:#000; background:#fff; padding:15px; border-radius:10px;">';
+          list.forEach((u, i) => {
+            // mark current player
+            let badge = '';
+            // we can't easily tell current logged user here in front-end without extra endpoint,
+            // but backend includes current user as 6th if logged in
+            html += `<li style="margin:10px 0; margin-left:50px; font-weight:bold;">${u.display_name}  -  ${u.best_score} pts</li>`;
+          });
+          html += '</ol>';
+          container.innerHTML = html;
+        })
+        .catch(err => {
+          document.getElementById('leaderboardList').innerHTML = '<p style="color:#fff;">Error loading leaderboard</p>';
+        });
+    }
+  </script>
+</body>
+</html>
